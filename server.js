@@ -18,13 +18,13 @@ const db = mysql.createConnection(
       database: 'employee_db'
     },
   );
-
+//Check if there's an error, else starts the application
 db.connect(err => {
     if(err) throw err;
     console.log('Connected to employee_db database')
     startApp();
 })
-
+//displays the following as a start of the app
 var startApp = () => {
     console.log("***********************************")
     console.log("*                                 *")
@@ -33,7 +33,7 @@ var startApp = () => {
     console.log("***********************************")
     startInquirer();
 }
-
+//starts Inquirer
 var startInquirer = () => {
     inquirer.prompt([
         {
@@ -58,5 +58,27 @@ var startInquirer = () => {
                 'No action']
         }
     ])
-   
+    .then((answers) => {
+        const {choices} = answers;
+        // In case user chooses View all departments
+        if(choices== "View All Departments") {
+            showDepartments();
+        }
+    }); 
+};
+
+//Show Departments
+showDepartments = () => {
+    const sql = `SELECT 
+  department.id,
+  department.name
+  FROM
+  department
+  `;
+
+  db.query(sql, (err, rows) => {
+    if (err) throw err;
+    console.table(rows);
+
+  });
 }
