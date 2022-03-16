@@ -70,6 +70,9 @@ var startInquirer = () => {
         if(choices == "View All Employees"){
             showEmployees();
         }
+        if(choices == "Add a department"){
+            addDepartment();
+        }
     }); 
 };
 
@@ -130,3 +133,31 @@ showEmployees = () => {
     startInquirer();
   });
 }
+
+//add department
+addDepartment = () => {
+    inquirer.prompt([
+      {
+        type: 'input', 
+        name: 'addDept',
+        message: "What is the name of the department?",
+        validate: addDept => {
+          if (addDept) {
+              return true;
+          } else {
+              console.log('Please enter a department');
+              return false;
+          }
+        }
+      }
+    ])
+      .then(answer => {
+        const sql = `INSERT INTO department (name)
+                    VALUES (?)`;
+        db.query(sql, answer.addDept, (err, result) => {
+          if (err) throw err;
+          console.log('Added ' + answer.addDept + " to departments!"); 
+          showDepartments();
+      });
+    });
+  };
