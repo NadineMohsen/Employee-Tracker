@@ -1,8 +1,9 @@
 // import inquirer and express
 const inquirer = require("inquirer")
-const express = require('express');
 // Import and require mysql2
 const mysql = require('mysql2');
+// import console.table
+const cTable = require('console.table'); 
 
 require('dotenv').config()
 
@@ -48,6 +49,7 @@ var startInquirer = () => {
                 'Add an employee',
                 'Update an employee role',
                 'Update an employee manager',
+                'View employees by manager',
                 'View employees by department',
                 'Delete a department',
                 'Delete a role',
