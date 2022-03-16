@@ -62,6 +62,7 @@ var startInquirer = () => {
         const {choices} = answers;
         // In case user chooses View all departments
         if(choices== "View All Departments") {
+            console.log("hello")
             showDepartments();
         }
     }); 
@@ -78,7 +79,12 @@ showDepartments = () => {
 
   db.query(sql, (err, rows) => {
     if (err) throw err;
+
+   
+
     console.table(rows);
 
   });
+
+
 }
