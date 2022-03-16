@@ -62,8 +62,13 @@ var startInquirer = () => {
         const {choices} = answers;
         // In case user chooses View all departments
         if(choices== "View All Departments") {
-            console.log("hello")
             showDepartments();
+        }
+        if(choices == "View All Roles"){
+            showRoles();
+        }
+        if(choices == "View All Employees"){
+            showEmployees();
         }
     }); 
 };
@@ -78,13 +83,50 @@ showDepartments = () => {
   `;
 
   db.query(sql, (err, rows) => {
-    if (err) throw err;
-
-   
-
+    if (err) throw err; 
     console.table(rows);
-
+    startInquirer();
   });
+}
 
+//Show Roles
+showRoles = () => {
+    const sql = `SELECT 
+  role.id,
+  role.title,
+  role.salary,
+  department.name AS department
+  FROM
+  role
+  INNER JOIN department ON role.department_id = department.id
+  `;
 
+  db.query(sql, (err, rows) => {
+    if (err) throw err; 
+    console.table(rows);
+    startInquirer();
+  });
+}
+
+//Show Employees
+showEmployees = () => {
+    const sql = `SELECT 
+  employee.id,
+  employee.first_name,
+  employee.last_name,
+  role.title,
+  department.name AS department,
+  role.salary,
+  CONCAT (manager.first_name, " ", manager.last_name) AS manager
+  FROM
+  employee
+  LEFT JOIN role ON employee.role_id = role.id
+  LEFT JOIN department ON role.department_id = department.id
+  LEFT JOIN employee manager ON employee.manager_id = manager.id`;
+
+  db.query(sql, (err, rows) => {
+    if (err) throw err; 
+    console.table(rows);
+    startInquirer();
+  });
 }
