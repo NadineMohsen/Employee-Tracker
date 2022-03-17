@@ -91,6 +91,9 @@ var startInquirer = () => {
         if(choices == "View employees by department"){
            viewByDep();
         }
+        if(choices == "No action"){
+          db.end();
+       }
     }); 
 };
 
