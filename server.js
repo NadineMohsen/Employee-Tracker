@@ -82,6 +82,9 @@ var startInquirer = () => {
         if(choices == "Update an employee role"){
             updateRole();
         }
+        if(choices == "Update an employee manager"){
+          updateManager();
+      }
     }); 
 };
 
@@ -380,3 +383,49 @@ updateRole = () => {
         })
     })
 }
+
+//update employee manager
+updateManager = () => {
+ const employeeSql = `SELECT * FROM employee`;
+ db.query(employeeSql,(err,data)=>{
+   if(err) throw err;
+   const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+   inquirer.prompt([
+    {
+     type: 'list',
+     name: 'name',
+     message: "Which employee would you like to update?",
+     choices: employees
+    }
+  ]).then(employeeChoice => {
+    const employee = employeeChoice.name;
+    const params=[];
+    params.push(employee);
+    const managerSql = `SELECT * FROM employee`;
+    db.query(managerSql,(err,data)=>{
+      const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'manager',
+          message: "Who is the employee's manager?",
+          choices: managers
+        }
+      ])
+      .then (managerChoice=>{
+        const manager=managerChoice.manager;
+        params.push(manager);
+        let employee =params[0];
+        params[0]=manager;
+        params[1]=employee;
+        const sql = `UPDATE employee SET manager_id=? WHERE id=?`;
+        db.query(sql,params,(err,data)=>{
+        if(err) throw err;
+        console.log("Employee has been updated!");       
+        showEmployees();
+        })
+      })
+    })
+  })
+  }) 
+} 
