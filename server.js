@@ -97,6 +97,9 @@ var startInquirer = () => {
         if (choices === "Delete a role") {
           deleteRole();
         }
+        if (choices === "Delete an employee") {
+          deleteEmployee();
+        }
         if(choices == "No action"){
           db.end();
        }
@@ -519,4 +522,37 @@ deleteRole = () => {
       });
     });
   });
+};
+
+//delete Employee
+deleteEmployee = () => {
+  // get employees from employee table 
+  const employeeSql = `SELECT * FROM employee`;
+
+  db.query(employeeSql, (err, data) => {
+    if (err) throw err; 
+
+  const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'name',
+        message: "Which employee would you like to delete?",
+        choices: employees
+      }
+    ])
+      .then(empChoice => {
+        const employee = empChoice.name;
+
+        const sql = `DELETE FROM employee WHERE id = ?`;
+
+       db.query(sql, employee, (err, result) => {
+          if (err) throw err;
+          console.log("Successfully Deleted!");
+        
+          showEmployees();
+    });
+  });
+ });
 };
