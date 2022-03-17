@@ -85,6 +85,9 @@ var startInquirer = () => {
         if(choices == "Update an employee manager"){
           updateManager();
         }
+        if(choices == "View employees by manager"){
+          viewByManager();
+       }
         if(choices == "View employees by department"){
            viewByDep();
         }
@@ -432,6 +435,16 @@ updateManager = () => {
   })
   }) 
 } 
+//view by manager
+viewByManager = () => {
+  const sql = `SELECT employee.first_name, employee.last_name, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee
+  LEFT JOIN employee manager ON employee.manager_id = manager.id`;
+  db.query(sql,(err,rows)=>{
+    if (err) throw err; 
+    console.table(rows); 
+    startInquirer();
+  })
+}
 
 //view by department
 viewByDep = () => {
