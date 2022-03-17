@@ -100,6 +100,9 @@ var startInquirer = () => {
         if (choices === "Delete an employee") {
           deleteEmployee();
         }
+        if (choices === "View department budgets") {
+          viewBudget();
+        }
         if(choices == "No action"){
           db.end();
        }
@@ -555,4 +558,20 @@ deleteEmployee = () => {
     });
   });
  });
+};
+
+// view department budget 
+viewBudget = () => {
+  const sql = `SELECT department_id AS id, 
+                      department.name AS department,
+                      SUM(salary) AS budget
+               FROM  role  
+               JOIN department ON role.department_id = department.id GROUP BY  department_id`;
+  
+  db.query(sql, (err, rows) => {
+    if (err) throw err; 
+    console.table(rows);
+
+    startInquirer(); 
+  });            
 };
