@@ -45,7 +45,7 @@ var startInquirer = () => {
                 'View All Roles',
                 'View All Employees',
                 'Add a department',
-                'Ad a role',
+                'Add a role',
                 'Add an employee',
                 'Update an employee role',
                 'Update an employee manager',
@@ -72,6 +72,9 @@ var startInquirer = () => {
         }
         if(choices == "Add a department"){
             addDepartment();
+        }
+        if(choices == "Add a role"){
+            addRole();
         }
     }); 
 };
@@ -161,3 +164,85 @@ addDepartment = () => {
       });
     });
   };
+
+  function addRole() {
+    // inquirer prompt for adding a new role
+    inquirer
+      //   role title
+      .prompt([
+        {
+          type: "input",
+          name: "role",
+          message: "What role title would you like to add?",
+          validate: (addRole) => {
+            if (addRole) {
+              return true;
+            } else {
+              console.log("Please enter a valid role");
+              return false;
+            }
+          },
+        },
+        //   role salary
+        {
+          type: "input",
+          name: "salary",
+          message: "What is the salary of the role?",
+          validate: (addSalary) => {
+            if (isNaN(addSalary)) {
+              console.log("Please enter a valid salary (numbers only)");
+              return false;
+            } else {
+              return true;
+            }
+          },
+        },
+      ])
+      .then((answer) => {
+        // create array using destructuring
+        const inputs = [answer.role, answer.salary];
+  
+        //   SQL to get department information
+        const deptSql = `SELECT
+        name, 
+        id
+        FROM
+        department`;
+  
+        db.query(deptSql, (err, data) => {
+          if (err) throw err;
+
+          // functional loop to create a list of departments
+          const deptartments = data.map(({ name, id }) => ({
+            name: name,
+            value: id,
+          }));
+  
+          // inquirer prompt to select department
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "dept",
+                message: "What department is this role in?",
+                choices: deptartments,
+              },
+            ])
+            .then((choice) => {
+              //   push the selected department into the input array
+              const dept = choice.dept;
+              inputs.push(dept);
+  
+              // sql query with dynamic options
+              const sql = `INSERT INTO role (title, salary, department_id)
+              VALUES (?, ?, ?)`;
+  
+             db.query(sql, inputs, (err, result) => {
+                if (err) throw err;
+                console.log(`Added ${answer.role} to roles!`);
+                showRoles();
+              });
+            });
+        });
+      });
+  }
