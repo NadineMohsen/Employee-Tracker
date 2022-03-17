@@ -91,6 +91,9 @@ var startInquirer = () => {
         if(choices == "View employees by department"){
            viewByDep();
         }
+        if (choices === "Delete a department") {
+          deleteDepartment();
+        }
         if(choices == "No action"){
           db.end();
        }
@@ -461,3 +464,30 @@ viewByDep = () => {
   })
 }
 
+//delete department
+deleteDepartment = () => {
+  const deptSql = `SELECT * FROM department`; 
+  db.query(deptSql, (err, data) => {
+    if (err) throw err; 
+    const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+    inquirer.prompt([
+      {
+        type: 'list', 
+        name: 'dept',
+        message: "What department do you want to delete?",
+        choices: dept
+      }
+    ])
+      .then(deptChoice => {
+        const dept = deptChoice.dept;
+        const sql = `DELETE FROM department WHERE id = ?`;
+
+        db.query(sql, dept, (err, result) => {
+          if (err) throw err;
+          console.log("Successfully deleted!"); 
+
+        showDepartments();
+      });
+    });
+  });
+}
