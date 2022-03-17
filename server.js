@@ -84,7 +84,10 @@ var startInquirer = () => {
         }
         if(choices == "Update an employee manager"){
           updateManager();
-      }
+        }
+        if(choices == "View employees by department"){
+           viewByDep();
+        }
     }); 
 };
 
@@ -429,3 +432,16 @@ updateManager = () => {
   })
   }) 
 } 
+
+//view by department
+viewByDep = () => {
+  const sql = `SELECT employee.first_name, employee.last_name, department.name AS department FROM employee
+  LEFT JOIN role ON employee.role_id = role.id 
+  LEFT JOIN department ON role.department_id = department.id`
+  db.query(sql,(err,rows)=>{
+    if (err) throw err; 
+    console.table(rows); 
+    startInquirer();
+  })
+}
+
