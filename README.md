@@ -34,7 +34,7 @@ To use this application, please follow these steps:
 
 - To use employee_db run `use employee_db;`
 
-- To see any table run `source * form nameOfTable`
+- To see any table run `select * form nameOfTable`
 
 ## Usage
 
