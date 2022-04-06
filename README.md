@@ -14,8 +14,7 @@
   - [Questions](#questions)
 
 ## Description
-A command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL.
-
+An employee tracker application using command line, node.js, express.js, mysql and Inquirer.
 
 ## Installation
 To use this application, please follow these steps: 
@@ -38,10 +37,10 @@ To use this application, please follow these steps:
 
 ## Usage
 
-This application will allow users to view, add, and edit employees, roles, departments, and managers. 
+This application will allow users to view, add, update and delete employees, roles, departments, and managers. 
 
 ```
-Run node server.js and follow the prompt
+Run node server.js and follow the inquirer prompt
 
 ```
 ## Contribution
@@ -49,12 +48,8 @@ Run node server.js and follow the prompt
 If you would like to contribute to this project reach out to me. Contact Information can be found below.
 
 ## Test-Instructions
-run: `npm run test`
+No test for this application
 
-## License
-This application is licensed under the MIT license.
-
-[MIT License](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Repository
 [Github Repo](https://github.com/NadineMohsen/Employee-Tracker)
@@ -68,6 +63,6 @@ For any questions you can reach me on github or by email
 - Email nadine.mohsen@hotmail.com
 
 ## Demo
-[Demo Link](https://drive.google.com/file/d/17eC142Px_cv9P2zGqVkOVM5k50g9SCph/view)
+[Demo Link](https://drive.google.com/file/d/1WnaD5rMYVAvb5L1qSz_cJcjcsDsA-qLI/view)
 
 
